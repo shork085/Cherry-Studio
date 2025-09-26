@@ -1,0 +1,259 @@
+import React from 'react'
+import styled from 'styled-components'
+
+import EditableNumber from '../EditableNumber'
+
+// 表格列配置接口
+export interface TableColumn {
+  key: string
+  label: string
+  width?: string
+  editable?: boolean
+}
+
+// 表格数据项接口
+export interface TableDataItem {
+  id: number
+  formula_id: number
+  group_type: string
+  material_id: number
+  material_code: string
+  material_desc: string
+  test_quality: number
+  quality_score: number
+  mix?: number | null
+  price: number
+  version?: number
+}
+
+// FormTableComponent组件属性接口
+export interface FormTableComponentProps {
+  title: string
+  data: TableDataItem[]
+  columns: TableColumn[]
+  onTestQualityChange?: (item: TableDataItem, newValue: number) => void
+  onMaterialCodeChange?: (item: TableDataItem, newCode: string) => void
+  isEditing?: boolean
+}
+
+// 内联可编辑文本（用于原料代码）
+const InlineEditableText: React.FC<{ value: string; onSave: (val: string) => Promise<boolean> | boolean }> = ({
+  value,
+  onSave
+}) => {
+  const [isEditing, setIsEditing] = React.useState(false)
+  const [editValue, setEditValue] = React.useState(value)
+  const inputRef = React.useRef<HTMLInputElement>(null)
+
+  React.useEffect(() => {
+    if (isEditing) {
+      inputRef.current?.focus()
+      inputRef.current?.select()
+    }
+  }, [isEditing])
+
+  React.useEffect(() => {
+    setEditValue(value)
+  }, [value])
+
+  const commit = async () => {
+    const next = editValue.trim()
+    if (!next || next === value) {
+      setIsEditing(false)
+      return
+    }
+    try {
+      const ok = await onSave(next)
+      if (ok !== false) {
+        setIsEditing(false)
+      } else {
+        // 保持编辑态，供用户继续修改
+        inputRef.current?.focus()
+        inputRef.current?.select()
+      }
+    } catch {
+      // 失败则保持编辑态
+      inputRef.current?.focus()
+      inputRef.current?.select()
+    }
+  }
+
+  const cancel = () => {
+    setIsEditing(false)
+    setEditValue(value)
+  }
+
+  return isEditing ? (
+    <input
+      ref={inputRef}
+      value={editValue}
+      onChange={(e) => setEditValue(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') commit()
+        if (e.key === 'Escape') cancel()
+      }}
+      style={{ width: '100%', border: 'none', outline: 'none', textAlign: 'center' }}
+    />
+  ) : (
+    <span style={{ display: 'inline-block', width: '100%', cursor: 'text' }} onClick={() => setIsEditing(true)}>
+      {value}
+    </span>
+  )
+}
+
+// 渲染单元格内容的辅助函数
+const renderCellContent = (
+  item: TableDataItem,
+  key: string,
+  onTestQualityChange?: (item: TableDataItem, newValue: number) => void,
+  onMaterialCodeChange?: (item: TableDataItem, newCode: string) => void
+) => {
+  switch (key) {
+    case 'material_code':
+      if (onMaterialCodeChange) {
+        return (
+          <InlineEditableText
+            value={item.material_code}
+            onSave={async (val) => {
+              const res = await onMaterialCodeChange(item, val)
+              return res as unknown as boolean
+            }}
+          />
+        )
+      }
+      return item.material_code
+    case 'test_quality':
+      if (onTestQualityChange) {
+        return (
+          <EditableNumber
+            value={item.test_quality}
+            min={0}
+            step={0.01}
+            precision={2}
+            onChange={(newValue) => {
+              if (newValue !== null) {
+                onTestQualityChange(item, newValue)
+              }
+            }}
+            style={{ width: '100%', textAlign: 'center' }}
+            align="center"
+          />
+        )
+      }
+      return Number(item.test_quality).toFixed(2)
+    case 'quality_score':
+      return Number(item.quality_score).toFixed(2)
+    case 'mix': {
+      const mixValue = item.mix
+      return mixValue != null && !isNaN(Number(mixValue)) ? Number(mixValue).toFixed(2) : '-'
+    }
+    case 'price':
+      return `￥${Number(item.price).toFixed(2)}`
+    default:
+      return item[key as keyof TableDataItem]
+  }
+}
+
+const FormTableComponent: React.FC<FormTableComponentProps> = ({
+  title,
+  data,
+  columns,
+  onTestQualityChange,
+  onMaterialCodeChange
+}) => {
+  return (
+    <FormItem>
+      <FormTitle>{title}</FormTitle>
+      <TableWrapper>
+        <FormTable>
+          <thead>
+            <tr>
+              {columns.map((column) => (
+                <th key={column.key} style={{ width: column.width }}>
+                  {column.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item, index) => (
+              <tr key={item.id ?? index}>
+                {columns.map((column) => (
+                  <td key={column.key}>
+                    {renderCellContent(item, column.key, onTestQualityChange, onMaterialCodeChange)}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </FormTable>
+      </TableWrapper>
+    </FormItem>
+  )
+}
+
+// 样式组件
+const FormItem = styled.div`
+  width: 50%;
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`
+
+const FormTitle = styled.div`
+  height: 24px;
+  text-align: center;
+  line-height: 24px;
+  background: #f5f5f5;
+  border: 1px solid #cfcfcf;
+  flex-shrink: 0; // 防止标题被压缩
+`
+
+const TableWrapper = styled.div`
+  flex: 1;
+  overflow: auto;
+  border: 1px solid #cfcfcf;
+  border-top: none;
+`
+
+const FormTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  position: relative;
+
+  thead tr {
+    background: #f5f5f5;
+    height: 20px;
+    border: 1px solid #cfcfcf;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  tbody tr {
+    border: 1px solid #adadad;
+    height: 28px;
+
+    td {
+      text-align: center;
+
+      /* 测试质量列的特殊样式 */
+      &:nth-child(3) {
+        cursor: text;
+        position: relative;
+
+        &:hover {
+          background-color: #f0f8ff;
+        }
+      }
+
+      /* 原料代码列的特殊样式（第一列） */
+      &:nth-child(1) {
+        cursor: text;
+      }
+    }
+  }
+`
+
+export default FormTableComponent

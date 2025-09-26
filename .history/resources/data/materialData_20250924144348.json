@@ -1,0 +1,98 @@
+[
+  {
+    "champ": "AB-71-3630",
+    "density": { "binder": 0.989, "pigment": 1, "solvent": 1, "water": 1.0 },
+    "eqWeight": { "ahew": 0, "eew": 0, "hew": 0, "iew": 0 },
+    "name": "DISPARLON 6500",
+    "phasePct": { "binder": 100, "pigment": 0, "solvent": 0, "water": 0 },
+    "sap": "15516"
+  },
+  {
+    "champ": "PT-33-2227",
+    "density": { "binder": 1, "pigment": 3.999, "solvent": 1, "water": 1.0 },
+    "eqWeight": { "ahew": 0, "eew": 0, "hew": 0, "iew": 0 },
+    "name": "KRONOS 2310",
+    "phasePct": { "binder": 0, "pigment": 100, "solvent": 0, "water": 0 },
+    "sap": "29137"
+  },
+  {
+    "champ": "AB-52-2073",
+    "density": { "binder": 0.98, "pigment": 1, "solvent": 1, "water": 1.0 },
+    "eqWeight": { "ahew": 0, "eew": 0, "hew": 0, "iew": 0 },
+    "name": "CRAYVALLAC ULTRA",
+    "phasePct": { "binder": 100, "pigment": 0, "solvent": 0, "water": 0 },
+    "sap": "1012924"
+  },
+  {
+    "champ": "KC-19-2434",
+    "density": { "binder": 1.6, "pigment": 1, "solvent": 1, "water": 1.0 },
+    "eqWeight": { "ahew": 0, "eew": 0, "hew": 0, "iew": 0 },
+    "name": "ACCELERATOR 960-1/ANCAMINE K54/DMP-30",
+    "phasePct": { "binder": 100, "pigment": 0, "solvent": 0, "water": 0 },
+    "sap": "1050388"
+  },
+  {
+    "champ": "KP-78-9952",
+    "density": { "binder": 1, "pigment": 1.39, "solvent": 1, "water": 1.0 },
+    "eqWeight": { "ahew": 0, "eew": 0, "hew": 0, "iew": 0 },
+    "name": "CHARMORPM40/PENTAERYTHRITOL/PENTAERYTOLM",
+    "phasePct": { "binder": 0, "pigment": 100, "solvent": 0, "water": 0 },
+    "sap": "1080277"
+  },
+  {
+    "champ": "PZQ-8007",
+    "density": { "binder": 1, "pigment": 1.9, "solvent": 1, "water": 1.0 },
+    "eqWeight": { "ahew": 0, "eew": 0, "hew": 0, "iew": 0 },
+    "name": "EXOLIT AP 422",
+    "phasePct": { "binder": 0, "pigment": 100, "solvent": 0, "water": 0 },
+    "sap": "1080324"
+  },
+  {
+    "champ": "KT-73-5668",
+    "density": { "binder": 1, "pigment": 1.5769, "solvent": 1, "water": 1.0 },
+    "eqWeight": { "ahew": 0, "eew": 0, "hew": 0, "iew": 0 },
+    "name": "AMMONIUM PENTABORATE (TECH POWDER) SEBU",
+    "phasePct": { "binder": 0, "pigment": 100, "solvent": 0, "water": 0 },
+    "sap": "1080755"
+  },
+  {
+    "champ": "KA-64-8188",
+    "density": { "binder": 0.94, "pigment": 1, "solvent": 1, "water": 1.0 },
+    "eqWeight": { "ahew": -35.6, "eew": 0, "hew": 0, "iew": 0 },
+    "name": "1,3-BAC",
+    "phasePct": { "binder": 100, "pigment": 0, "solvent": 0, "water": 0 },
+    "sap": "1123809"
+  },
+  {
+    "champ": "PZ-73-3863",
+    "density": { "binder": 1, "pigment": 2.71, "solvent": 1, "water": 1.0 },
+    "eqWeight": { "ahew": 0, "eew": 0, "hew": 0, "iew": 0 },
+    "name": "COATFORCE CF30",
+    "phasePct": { "binder": 0, "pigment": 100, "solvent": 0, "water": 0 },
+    "sap": "1158639"
+  },
+  {
+    "champ": "HE-58-1944",
+    "density": { "binder": 1.131, "pigment": 1, "solvent": 1, "water": 1.0 },
+    "eqWeight": { "ahew": 0, "eew": 140, "hew": 0, "iew": 0 },
+    "name": "EPON RESIN 8111",
+    "phasePct": { "binder": 100, "pigment": 0, "solvent": 0, "water": 0 },
+    "sap": "1159441"
+  },
+  {
+    "champ": "",
+    "density": { "binder": 1, "pigment": 1.574, "solvent": 1, "water": 1.0 },
+    "eqWeight": { "ahew": 0, "eew": 0, "hew": 0, "iew": 0 },
+    "name": "MELAFINE / MELAMINE",
+    "phasePct": { "binder": 0, "pigment": 99.95, "solvent": 0, "water": 0.05 },
+    "sap": "1269471"
+  },
+  {
+    "champ": "",
+    "density": { "binder": 0.972, "pigment": 1, "solvent": 1, "water": 1.0 },
+    "eqWeight": { "ahew": -115, "eew": 0, "hew": 0, "iew": 0 },
+    "name": "Jeffamine D-400",
+    "phasePct": { "binder": 100, "pigment": 0, "solvent": 0, "water": 0 },
+    "sap": "1278105"
+  }
+]
