@@ -99,9 +99,9 @@ const HomeFormPage: React.FC<Props> = ({ searchKeyword = '', stoichRatio = 1 }) 
   const [formStat, setFormStat] = React.useState<any[]>([])
 
   // 固含
-  const [formSolidA, setFormSolidA] = React.useState<any[]>([])
-  const [formSolidB, setFormSolidB] = React.useState<any[]>([])
-  const [formSolidMix, setFormSolidMix] = React.useState<any[]>([])
+  const [formSolidA] = React.useState<any[]>([])
+  const [formSolidB] = React.useState<any[]>([])
+  const [formSolidMix] = React.useState<any[]>([])
 
   // 表格列配置
   const tableColumns: TableColumn[] = [

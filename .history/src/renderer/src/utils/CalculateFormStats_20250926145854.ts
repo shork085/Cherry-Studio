@@ -69,7 +69,7 @@ export interface ComputeResult {
       total_binder_wt_set: number
       reactive_pct_in_binder: number // reactive_set / total_binder_set × 100
       non_reactive_pct_in_binder: number //on_reactive_set / total_binder_set × 100
-      // ratio_reactive_to_nonreactive: number | null
+      ratio_reactive_to_nonreactive: number | null
     }
   }
 }

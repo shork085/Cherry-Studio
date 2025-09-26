@@ -98,10 +98,10 @@ const HomeFormPage: React.FC<Props> = ({ searchKeyword = '', stoichRatio = 1 }) 
   // 配比
   const [formStat, setFormStat] = React.useState<any[]>([])
 
-  // 固含
-  const [formSolidA, setFormSolidA] = React.useState<any[]>([])
-  const [formSolidB, setFormSolidB] = React.useState<any[]>([])
-  const [formSolidMix, setFormSolidMix] = React.useState<any[]>([])
+  // 固含（仅使用 setter）
+  const [, setFormSolidA] = React.useState<any[]>([])
+  const [, setFormSolidB] = React.useState<any[]>([])
+  const [, setFormSolidMix] = React.useState<any[]>([])
 
   // 表格列配置
   const tableColumns: TableColumn[] = [
