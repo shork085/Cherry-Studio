@@ -419,43 +419,60 @@ const HomeFormPage: React.FC<Props> = ({ searchKeyword = '', stoichRatio = 1 }) 
   }
 
   // 处理测试质量更新
+  const inFlightUpdatesRef = React.useRef<Map<number, Promise<void>>>(new Map())
+
+  const serializeRowUpdate = (rowId: number, task: () => Promise<void>) => {
+    const chain = inFlightUpdatesRef.current.get(rowId) || Promise.resolve()
+    const next = chain
+      .catch(() => {})
+      .then(task)
+      .finally(() => {
+        // 若链已完成且等于当前 Promise，则清理
+        if (inFlightUpdatesRef.current.get(rowId) === next) {
+          inFlightUpdatesRef.current.delete(rowId)
+        }
+      })
+    inFlightUpdatesRef.current.set(rowId, next)
+    return next
+  }
+
   const handleTestQualityChange = async (item: any, newValue: number) => {
-    if (!currentFormulaId) return
+    if (!currentFormulaId || !item?.id) return
+    // 若值未变化，跳过
+    if (Number(item.test_quality) === Number(newValue)) return
 
-    try {
-      // setIsLoading(true)
-      // if (!item.id) {
-      //   throw new Error('原料信息不完整，无法更新')
-      // }
+    return serializeRowUpdate(item.id, async () => {
+      try {
+        // 乐观更新UI
+        updateMaterialRecord(item.id, { test_quality: newValue })
 
-      // 乐观更新UI
-      // updateMaterialRecord(item.id, { test_quality: newValue })
-      // 获取当前版本号
-      const currentVersion = await window.api.dataviz.getMaterialVersionByRowId(item.id)
+        // 第一次尝试
+        let currentVersion = await window.api.dataviz.getMaterialVersionByRowId(item.id)
+        if (currentVersion == null) throw new Error('无法获取原料版本信息')
 
-      if (currentVersion === null) {
-        throw new Error('无法获取原料版本信息')
+        try {
+          await window.api.dataviz.updateMaterialTestQuality(item.id, newValue, currentVersion)
+        } catch (err: any) {
+          const msg = String(err?.message || '')
+          const conflict = msg.includes('其它用户修改') || msg.includes('其他用户修改') || msg.includes('正在被')
+          if (!conflict) throw err
+          // 冲突：刷新版本后重试一次
+          currentVersion = await window.api.dataviz.getMaterialVersionByRowId(item.id)
+          if (currentVersion == null) throw err
+          await window.api.dataviz.updateMaterialTestQuality(item.id, newValue, currentVersion)
+        }
+
+        // 刷新该组数据
+        const rows = await window.api.dataviz.getFormulaMaterials(currentFormulaId)
+        const groupData = rows.filter((row: any) => row.group_type === item.group_type)
+        updateGroupData(item.group_type, groupData)
+      } catch (error: any) {
+        console.error('更新测试质量失败:', error)
+        // 回滚UI更新
+        updateMaterialRecord(item.id, { test_quality: item.test_quality })
+        alert(error?.message || '更新失败，请重试')
       }
-      // 更新测试质量
-      await window.api.dataviz.updateMaterialTestQuality(item.id, newValue, currentVersion)
-
-      updateMaterialRecord(item.id, { test_quality: newValue })
-
-      const rows = await window.api.dataviz.getFormulaMaterials(currentFormulaId)
-      const groupData = rows.filter((row: any) => row.group_type === item.group_type)
-
-      // 重新加载配方数据以获取更新后的质量分数
-      // await loadFormulaData(currentFormulaId)
-
-      updateGroupData(item.group_type, groupData)
-    } catch (error: any) {
-      console.error('更新测试质量失败:', error)
-      // 回滚UI更新
-      updateMaterialRecord(item.id, { test_quality: item.test_quality })
-      alert(error.message || '更新失败，请重试')
-    } finally {
-      setIsLoading(false)
-    }
+    })
   }
 
   // 处理原料代码更新

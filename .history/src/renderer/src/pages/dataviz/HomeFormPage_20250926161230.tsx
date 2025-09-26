@@ -429,7 +429,7 @@ const HomeFormPage: React.FC<Props> = ({ searchKeyword = '', stoichRatio = 1 }) 
       // }
 
       // 乐观更新UI
-      // updateMaterialRecord(item.id, { test_quality: newValue })
+      updateMaterialRecord(item.id, { test_quality: newValue })
       // 获取当前版本号
       const currentVersion = await window.api.dataviz.getMaterialVersionByRowId(item.id)
 
@@ -438,8 +438,6 @@ const HomeFormPage: React.FC<Props> = ({ searchKeyword = '', stoichRatio = 1 }) 
       }
       // 更新测试质量
       await window.api.dataviz.updateMaterialTestQuality(item.id, newValue, currentVersion)
-
-      updateMaterialRecord(item.id, { test_quality: newValue })
 
       const rows = await window.api.dataviz.getFormulaMaterials(currentFormulaId)
       const groupData = rows.filter((row: any) => row.group_type === item.group_type)
