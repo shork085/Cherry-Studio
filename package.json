@@ -39,6 +39,7 @@
     "build:mac": "dotenv npm run build && electron-builder --mac --arm64 --x64",
     "build:mac:arm64": "dotenv npm run build && electron-builder --mac --arm64",
     "build:mac:x64": "dotenv npm run build && electron-builder --mac --x64",
+    "build:skip-check": "electron-vite build && npm run dataviz:build && npm run dataviz:copy",
     "build:linux": "dotenv npm run build && electron-builder --linux --x64 --arm64",
     "build:linux:arm64": "dotenv npm run build && electron-builder --linux --arm64",
     "build:linux:x64": "dotenv npm run build && electron-builder --linux --x64",
