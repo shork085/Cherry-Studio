@@ -18,6 +18,8 @@ if (typeof window !== 'undefined' && !window.api) {
         console.warn('[web mock] storeSync.onUpdate called in browser')
         return null
       }
-    }
-  } as any
+    },
+    filesPath: '/mock/files/path',
+    isPackaged: false
+  }
 }

@@ -3,7 +3,7 @@ export {}
 
 // 给浏览器假的实现
 if (typeof window !== 'undefined' && !window.api) {
-  window.api = {
+  window.api = ({
     storeSync: {
       subscribe: async () => {
         console.warn('[web mock] storeSync.subscribe called in browser')
@@ -19,5 +19,5 @@ if (typeof window !== 'undefined' && !window.api) {
         return null
       }
     }
-  } as any
+  } as any)
 }
